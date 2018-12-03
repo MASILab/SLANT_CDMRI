@@ -23,11 +23,11 @@ class UNet3D(nn.Module):
         self.dc8 = self.decoder(256 + 512, 256, kernel_size=3, stride=1, padding=1, bias=True)
         self.dc7 = self.decoder(256, 256, kernel_size=3, stride=1, padding=1, bias=True)
         self.dc6 = self.decoder(256, 256, kernel_size=2, stride=2, bias=True)
-        self.dc5 = self.decoder(128 + 256, 133, kernel_size=3, stride=1, padding=1, bias=True)
-        self.dc4 = self.decoder(133, 133, kernel_size=3, stride=1, padding=1, bias=True)
-        self.dc3 = self.decoder(133, 133, kernel_size=2, stride=2, bias=True)
-        self.dc2 = self.decoder(64 + 133, 133, kernel_size=3, stride=1, padding=1, bias=True)
-        self.dc1 = self.decoder(133, 133, kernel_size=3, stride=1, padding=1, bias=True)
+        self.dc5 = self.decoder(128 + 256, 128, kernel_size=3, stride=1, padding=1, bias=True)
+        self.dc4 = self.decoder(128, 128, kernel_size=3, stride=1, padding=1, bias=True)
+        self.dc3 = self.decoder(128, 128, kernel_size=2, stride=2, bias=True)
+        self.dc2 = self.decoder(64 + 128, 64, kernel_size=3, stride=1, padding=1, bias=True)
+        self.dc1 = self.decoder(64, 64, kernel_size=3, stride=1, padding=1, bias=True)
         self.dc0 = self.decoder(64, n_classes, kernel_size=1, stride=1, bias=True)
 
 
@@ -36,7 +36,7 @@ class UNet3D(nn.Module):
         if batchnorm:
             layer = nn.Sequential(
                 nn.Conv3d(in_channels, out_channels, kernel_size, stride=stride, padding=padding, bias=bias),
-                nn.BatchNorm2d(out_channels),
+                nn.BatchNorm3d(out_channels),
                 nn.ReLU())
         else:
             layer = nn.Sequential(
@@ -89,12 +89,12 @@ class UNet3D(nn.Module):
         d5 = self.dc5(d6)
         d4 = self.dc4(d5)
         # print("block d5 size = %s" % (str(d5.size())))
-        # print("block d4 size = %s" % (str(d4.size())))
+        print("block d4 size = %s" % (str(d4.size())))
         del d6, d5
 
         d3 = torch.cat((self.dc3(d4), syn0),1)
         del d4, syn0
-        # print("block d3 size = %s" % (str(d3.size())))
+        print("block d3 size = %s" % (str(d3.size())))
 
         d2 = self.dc2(d3)
         d1 = self.dc1(d2)
@@ -102,6 +102,6 @@ class UNet3D(nn.Module):
         # del d3, d2
         # print("block d1 size = %s" % (str(d1.size())))
 
-        # d0 = self.dc0(d1)
+        d0 = self.dc0(d1)
 
-        return d1
+        return d0

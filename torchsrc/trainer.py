@@ -184,7 +184,7 @@ def l2_normloss_new(input,target,mask):
     return loss
 
 def l1_normloss(input,target,size_average=True):
-    criterion = torch.nn.L1Loss().cuda()
+    criterion = torch.nn.L1Loss(size_average).cuda()
     loss = criterion(input, target)
     # if size_average:
     #     loss /= (target.size()[0]*target.size()[1])
@@ -506,13 +506,15 @@ class Trainer(object):
 
             pred = self.model(data)
             self.optim.zero_grad()
-
+            # pred_np = pred.data.cpu().numpy()
+            # target_np = target.data.cpu().numpy()
 
             # loss = dice_loss_3d(pred*100 ,target)
             # print('epoch=%d, batch_idx=%d, loss=%.4f \n'%(self.epoch,batch_idx,loss.data[0]))
             # fv.write('epoch=%d, batch_idx=%d, loss=%.4f \n'%(self.epoch,batch_idx,loss.data[0]))
 
-            loss = dice_loss_3d(pred*100 ,target)
+            # loss = dice_loss_3d(pred*100 ,target)
+            loss = l1_normloss(pred,target)
             # loss_l2 = dice_l2(pred*10000 ,target*10000)/1000
             # print('epoch=%d, batch_idx=%d, loss=%.4f, loss l2=%.4f \n'%(self.epoch,batch_idx,loss.data[0],loss_l2.data[0]))
             # fv.write('epoch=%d, batch_idx=%d, loss=%.4f, loss l2=%.4f \n'%(self.epoch,batch_idx,loss.data[0],loss_l2.data[0]))

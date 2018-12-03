@@ -12,4 +12,4 @@ setpkgs -a anaconda3
 source activate python27 
 setpkgs -a cuda8.0 
 
-python train.py --epoch=20 --piece=1_1_1 
+python train.py --train_data_dir /share5/huoy1/CDMRI_Challenge_2018/TeamA/AtoB/Data/Training --test_data_dir /share5/huoy1/CDMRI_Challenge_2018/TeamA/AtoB/Data/Training --working_dir /share5/huoy1/CDMRI_Challenge_2018/working_dir/Experiment1

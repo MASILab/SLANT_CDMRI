@@ -1,2 +1,2 @@
 from .imgloader_CT_3D import pytorch_loader
-from .imgloader_CT_3D_allpiece import pytorch_loader_allpiece
+from .imgloader_CDMRI import pytorch_loader_allpiece
